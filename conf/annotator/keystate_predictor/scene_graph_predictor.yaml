@@ -1,0 +1,8 @@
+scene_graph_predictor:
+  _target_: nils.annotator.keystate_predictors.scene_graph_predictor.SceneGraphChangeKeystatePredictor
+
+
+  only_trigger_object_relations: True
+
+
+

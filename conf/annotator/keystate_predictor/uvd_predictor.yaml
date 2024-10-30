@@ -1,0 +1,5 @@
+uvd_predictor:
+  _target_: nils.annotator.keystate_predictors.uvd_predictor.UVDKeyStatePredictor
+
+  device: "cuda"
+  min_interval: 15

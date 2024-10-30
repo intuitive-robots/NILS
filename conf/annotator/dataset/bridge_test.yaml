@@ -1,0 +1,6 @@
+_target_: nils.my_datasets.bridge_test.BridgeTest
+
+sampling_rate : 4
+name: bridge_test
+path: /home/DATA_SHARE/bridge_data/bridge_data_v2
+

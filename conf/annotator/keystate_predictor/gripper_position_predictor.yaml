@@ -1,0 +1,9 @@
+gripper_position_predictor:
+  _target_: nils.annotator.keystate_predictors.gripper_position_predictor.GripperPosKeystatePredictor
+  n_frames_proximity: 5
+  offset: -2
+
+
+
+
+

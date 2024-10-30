@@ -1,0 +1,11 @@
+object_movement_predictor:
+  _target_: nils.annotator.keystate_predictors.object_movement_predictor.ObjectMovementKeystatePredictor
+  gripper_close_movement_filter: False
+  movement_threshold: 6
+  n_frames_movement: 3
+  offset: 2
+
+
+
+
+

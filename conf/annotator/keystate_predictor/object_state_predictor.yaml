@@ -1,0 +1,3 @@
+object_state_predictor:
+  _target_: nils.annotator.keystate_predictors.state_change_predictor.StateChangeKeystatePredictor
+  verify_with_vlm: False

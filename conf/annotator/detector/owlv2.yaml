@@ -1,0 +1,4 @@
+_target_: nils.specialist_models.detectors.owlv2.OWLv2
+
+hf_path: google/owlv2-base-patch16-ensemble #google/owlv2-base-patch16-ensemble, google/owlv2-large-patch14-ensemble, google/owlv2-base-patch16
+bsz: 4

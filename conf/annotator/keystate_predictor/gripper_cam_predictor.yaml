@@ -1,0 +1,6 @@
+gripper_cam_predictor:
+  _target_: nils.annotator.keystate_predictors.gripper_cam_predictor.GripperCamKeystatePredictor
+
+
+
+

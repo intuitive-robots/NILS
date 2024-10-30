@@ -1,0 +1,147 @@
+defaults:
+  - _self_
+  - vlm: gemini #pg_blip # gemini #gpt4v #prismatic
+  - dataset:
+      - bridge_test
+  - detector: grounding_dino #grounding_dino #owlv2
+  - segmentation_model: sam2 #sam #efficient_sam #sam2
+  - ov_segmentation_model: clipseg
+  - llm: googleapi #googleapi #openaiapi
+  - state_detector: open_clip
+  - keystate_predictor:
+      - object_movement_predictor
+      - scene_graph_predictor
+      - gripper_close_predictor
+      - gripper_position_predictor
+      - object_state_predictor
+
+
+keystate_predictors_for_voting:
+  - object_movement_predictor
+  - gripper_close_predictor
+  - gripper_position_predictor
+  - scene_graph_predictor
+  - object_state_predictor
+
+
+GPU_IDS: [3]
+PROC_PER_GPU: 1
+n_splits: 32
+
+
+#Stage 1
+use_vlm_predictions_only: False
+check_for_undetected_objects: False
+objectness_threshold: 0.15
+
+only_predefined_objects: False
+
+
+
+#--------------------------------
+
+
+#Stage 2
+
+#Perception Settings
+
+detection_threshold: 0.15
+
+embodiment_prompt_clipseg: A picture of a black robotic gripper #  A picture of a robot arm
+embodiment_prompt_owl: a picture of a robot
+embodiment_prompt_grounding_dino: the black robotic gripper #robot gripper #robot arm
+
+use_depth: True
+
+canonicalize: False
+
+#DEVA (Mask Propagation) Settings
+deva_detection_every: 20
+deva_n_voting_frames: 4
+
+objectness_check_interval: 8
+objectness_check_threshold: 0.5
+
+robot_endeffector_location_weight: "bottom"
+robot_location_camera_frame: behind #front #behind
+
+enable_temporal_aggregation: True
+
+object_threshold: 0.05
+use_vlm_fallback: True
+
+scene_graph:
+  interval: 1
+  denoise_interval: 3
+
+
+#--------------------------------
+
+
+#Stage 3
+
+keystate_threshold: 0.15
+
+
+#object_movement_predictor
+gripper_close_movement_filter: False
+movement_threshold: 1.0
+n_frames_movement: 3
+use_flow_for_movement: False
+use_flow_always: True
+
+
+
+
+
+prior:
+  use_predefined_task_list: False
+  task_list: /home/${oc.env:USER}/NILS/data/task_list.txt
+
+  use_predefined_object_list: False
+  object_list: /home/${oc.env:USER}/NILS/data/object_list.txt
+
+  use_gt_keystates: True
+
+
+
+
+io:
+  labeled_frames_dir:  /home/${oc.env:USER}/NILS
+  save_frames: True
+
+
+#ABLATIONS
+ablation: False
+
+enable_detection_ensembling: True
+enable_scene_graph_denoising: True
+enable_object_state_filtering: True
+enable_detection_refinment: True
+enable_object_centric_relations: True
+simple_initial_object_detection: False
+
+
+#Prompt Settings
+prompt_interval: 4
+prompt:
+  open_ended: True
+  use_object_movements: True
+  use_gripper_object_distances: False
+  use_state_information: True
+  use_held_object: False
+  use_object_relations: True
+  use_robot_movement: False
+  use_scene_description: True
+  use_full_scene_description: False
+  use_rotations: False
+
+
+user: ${oc.env:USER}
+vocab_file: /home/${user}/NILS/data/lvis_classes.txt
+precomputed_embedding_file: /home/${user}/NILS/data/${state_detector.model_name}_lvis_embeddings.pth
+
+
+
+
+

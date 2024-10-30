@@ -1,0 +1,7 @@
+gripper_close_predictor:
+  _target_: nils.annotator.keystate_predictors.gripper_close_predictor.GripperClosePredictor
+
+
+  gripper_close_to_open: True
+  gripper_open_to_close: False
+  gripper_frame_offset: 1

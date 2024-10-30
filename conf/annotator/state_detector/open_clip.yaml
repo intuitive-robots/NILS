@@ -1,0 +1,11 @@
+_target_: nils.specialist_models.openclip.OpenClip
+
+model_name: 'hf-hub:timm/ViT-L-16-SigLIP-256'   #ViT-B-32, #hf-hub:timm/ViT-L-16-SigLIP-256 coca_ViT-L-14 #convnext_large_d_320 # hf-hub:apple/DFN5B-CLIP-ViT-H-14-384 # hf-hub:apple/DFN2B-CLIP-ViT-L-14 # hf-hub:apple/DFN5B-CLIP-ViT-H-14
+
+#hf-hub:timm/ViT-SO400M-14-SigLIP
+
+#hf-hub:timm/ViT-L-16-SigLIP-256
+
+tokenizer: "hf-hub:timm/ViT-L-16-SigLIP-256" #ViT-L-14
+pretrained: null  #laion2b_s34b_b79k, laion2b_s13b_b90k #laion2b_s29b_b131k_ft_soup # null
+bsz: 32
