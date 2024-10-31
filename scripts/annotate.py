@@ -40,8 +40,6 @@ def annotate(cfg):
     logging.info(f"Available GPUs: {os.environ['CUDA_VISIBLE_DEVICES']}")
     logging.info(f"CUDA Device Count: {torch.cuda.device_count()}")
 
-    #ds = BridgePlayDataset(path=cfg["dataset"]["path"], n_jobs=cfg.n_splits, task_number=task, use_diverse_subset=False,
-                           #sampling_rate=cfg["use_calvin_tcp_centerdataset"]["sampling_rate"], )
     ds = hydra.utils.instantiate(cfg["dataset"], n_jobs = cfg.n_splits,task_number=task)
     annotator = KeyStateAnnotator(cfg, initialize_models=True, ds=ds)
     loader = DataLoader(ds, batch_size=None)
