@@ -1,0 +1,12 @@
+[submodule "dependencies/Depth-Anything-V2"]
+	path = dependencies/Depth-Anything-V2
+	url = https://github.com/DepthAnything/Depth-Anything-V2
+[submodule "dependencies/unimatch"]
+	path = dependencies/unimatch
+	url = https://github.com/autonomousvision/unimatch.git
+[submodule "dependencies/Tracking-Anything-with-DEVA"]
+	path = dependencies/Tracking-Anything-with-DEVA
+	url = https://github.com/hkchengrex/Tracking-Anything-with-DEVA.git
+[submodule "dependencies/dinov2"]
+	path = dependencies/dinov2
+	url = https://github.com/facebookresearch/dinov2.git
