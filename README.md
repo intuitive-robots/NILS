@@ -104,6 +104,10 @@ You can control the number keystate heuristics by changing the entries in `keyst
 ## Installation
 
 ```
+git clone --recurse-submodules git@github.com:intuitive-robots/NILS.git
+```
+
+```
 pip install torch==2.3.1
 
 conda create -n "NILS" python=3.9
@@ -114,18 +118,11 @@ pip install -U openmim
 mim install mmcv
 ```
 
-The framework relies on several specialst models, which you need to install manually:
-
-
-```
-mkdir dependencies
-cd dependencies
-``` 
+The framework relies on several specialst models, which you need to install manually
 
 ### DEVA
 ```
-git clone https://github.com/hkchengrex/Tracking-Anything-with-DEVA.git
-cd Tracking-Anything-with-DEVA
+cd dependencies/Tracking-Anything-with-DEVA
 pip install -e . --no-dependencies
 bash scripts/download_models.sh
 ```
@@ -138,8 +135,7 @@ cd nils/specialst_models/sam2/checkpoints
 
 ### DepthAnythingv2
 ```
-git clone https://github.com/DepthAnything/Depth-Anything-V2
-cd Depth-Anything-V2
+cd dependencies/Depth-Anything-V2
 mkdir checkpoints;cd checkpoints
 wget https://huggingface.co/depth-anything/Depth-Anything-V2-Metric-Hypersim-Large/resolve/main/depth_anything_v2_metric_hypersim_vitl.pth?download=true -O depth_anything_v2_metric_hypersim_vitl.pth
 export PYTHONPATH=$PYTHONPATH:path/to/Depth-Anything-V2/metric_depth
@@ -148,8 +144,7 @@ export PYTHONPATH=$PYTHONPATH:path/to/Depth-Anything-V2/metric_depth
 ### Unimatch (GMFLOW)
 
 ```
-git clone https://github.com/autonomousvision/unimatch.git
-cd unimatch
+cd dependencies/unimatch
 export PYTHONPATH=$PYTHONPATH:path/to/unimatch
 mkdir pretrained;cd pretrained
 wget https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmflow-scale2-regrefine6-mixdata-train320x576-4e7b215d.pth
