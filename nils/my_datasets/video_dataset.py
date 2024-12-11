@@ -49,6 +49,7 @@ class VideoDataset(Dataset):
 
                 frames.append(frame)
                 frame_names.append(f"{frame_idx}.jpg")
+                frame_idx += 1
 
 
             frames = np.array(frames)
@@ -73,7 +74,7 @@ class VideoDataset(Dataset):
         
         data = {}
         data["rgb_static"] = frames
-        data["path"] = np.array([self.path] * len(frames))
+        data["path"] = np.array([self.paths[idx]] * len(frames))
         data["frame_names"] = np.array(self.frame_names[idx])
 
         return data

@@ -30,6 +30,9 @@ n_splits: 32
 
 
 #Stage 1
+object_retrieval_n_frames: 4
+
+
 use_vlm_predictions_only: False
 check_for_undetected_objects: False
 objectness_threshold: 0.15

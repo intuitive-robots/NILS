@@ -42,7 +42,7 @@ from nils.annotator.surface_detector import SurfaceTransformConfig, SurfaceTrans
 from nils.pointcloud.pointcloud import apply_mask_to_image
 from nils.specialist_models.sam2.utils.amg import remove_small_regions
 from nils.utils.utils import get_box_dense_agreement, get_intrinsics
-from nils.specialist_models.llm.google_cloud_api import VertexAIAPI
+from nils.specialist_models.llm.google_cloud_api import VertexAIAPI, get_prompt_simple
 from nils.specialist_models.llm.openai_llm import OpenAIAPI, get_simple_prompt_nl_reasons_gpt
 from nils.scene_graph.canonicalization import get_surface_object_masks, \
     get_lines_from_surface_masks, cluster_lines, get_best_line_from_clusters, overlay_lines_on_mask, \
@@ -174,6 +174,9 @@ class KeyStateAnnotator:
         image_subset_indices = np.linspace(0, len(images) - 1, n_images_for_detection, dtype=int)
 
         image_subset = images[image_subset_indices]
+        
+        
+        
 
         vocab_name = Path(self.cfg.vocab_file).stem
 
@@ -212,7 +215,7 @@ class KeyStateAnnotator:
             if simple_ablation:
                 n_frames = 1
             else:
-                n_frames = 8
+                n_frames = self.cfg.object_retrieval_n_frames
 
             frame_indices = np.linspace(0, len(image_subset) - 1, n_frames, dtype=int)
             init_obj_det_frames = image_subset[frame_indices]
@@ -1766,7 +1769,7 @@ class KeyStateAnnotator:
 
         # robot_movement = self.get_robot_movement(start_idx, end_idx, batch["rgb_static"])
 
-        all_nl_reasons = []
+        nl_reasons = []
         for keystate_idx, ks in enumerate(tqdm(keystates)):
             try:
 
@@ -1891,17 +1894,18 @@ class KeyStateAnnotator:
                 prompt_nl_reasons = create_observation_prompt(averaged_final_sg, averaged_init_sg, cur_reasons,
                                                               movements_nl_2d)
 
-                all_nl_reasons.append(prompt_nl_reasons)
+                nl_reasons.append(prompt_nl_reasons)
                 
-                all_nl_reasons = "\n".join(all_nl_reasons)
-
+                all_nl_reasons = prompt_nl_reasons
+                
                 task_list_nl = "\n".join(task_list_nl)
                 task_list_nl = task_list_nl.replace(",", "")
 
-                prompt_nl = self.llm.get_nl_prompt_keystate_reasons(task_list_nl, prompt_nl_reasons,
-                                                                    open_ended=open_ended)
-                
-                prompt_nl = get_simple_prompt_nl_reasons_gpt(all_nl_reasons) 
+                if "gpt" in self.llm.__class__.__name__.lower():
+                    prompt_nl = get_simple_prompt_nl_reasons_gpt(all_nl_reasons) 
+                else:
+                    prompt_nl = get_prompt_simple(prompt_nl_reasons)
+            
 
                 prompts.append(prompt_nl)
 
@@ -1909,12 +1913,12 @@ class KeyStateAnnotator:
                 print(e)
                 prompts.append(None)
                 continue
-        all_nl_reasons = np.array(all_nl_reasons)
+        nl_reasons = np.array(nl_reasons)
         prompts_aggregated = []
         if aggregate_keystates != 1:
             prompts_aggregated = []
-            for i in range(0, len(all_nl_reasons) - aggregate_keystates):
-                cur_reasons = all_nl_reasons[i:i + aggregate_keystates]
+            for i in range(0, len(nl_reasons) - aggregate_keystates):
+                cur_reasons = nl_reasons[i:i + aggregate_keystates]
                 concat_reasons_nl = ""
                 for task_idx, reason in enumerate(cur_reasons):
                     concat_reasons_nl += f"Task {task_idx + 1}: \n {reason}\n"

@@ -30,6 +30,9 @@ n_splits: 32
 
 
 #Stage 1
+
+object_retrieval_n_frames: 4
+
 use_vlm_predictions_only: False
 check_for_undetected_objects: False
 objectness_threshold: 0.15
@@ -139,8 +142,11 @@ prompt:
 
 
 user: ${oc.env:USER}
-vocab_file: /home/${user}/NILS/data/lvis_classes.txt
-precomputed_embedding_file: /home/${user}/NILS/data/${state_detector.model_name}_lvis_embeddings.pth
+
+
+vocab_file: /home/${user}/code/NILS/data/lvis_classes.txt
+precomputed_embedding_file: /home/${user}/code/NILS/data/${state_detector.model_name}_lvis_embeddings.pth
+
 
 
 

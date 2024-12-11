@@ -6,7 +6,9 @@ from pathlib import Path
 import torch
 from deva.model.network import DEVA
 
-home = str(Path.home())
+
+
+home = os.path.join(os.environ["NILS_DIR"], "dependencies")
 
 def add_common_eval_args(parser: ArgumentParser):
     parser.add_argument('--model', default=os.path.join(home,'Tracking-Anything-with-DEVA/saves/DEVA-propagation.pth'))

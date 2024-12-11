@@ -15,12 +15,6 @@ from deva.inference.result_utils import ResultSaver
 from deva.model.network import DEVA
 from deva.utils.tensor_utils import pad_divide_by, unpad
 
-# try:
-#     from groundingdino.util.inference import Model as GroundingDINOModel
-# except ImportError:
-#     # not sure why this happens sometimes
-#     from GroundingDINO.groundingdino.util.inference import Model as GroundingDINOModel
-from segment_anything import SamPredictor
 from torchvision.ops import masks_to_boxes
 
 from nils.segmentator.deva_object_manager import ObjectManager

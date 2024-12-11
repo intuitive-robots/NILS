@@ -9,6 +9,11 @@ import numpy as np
 from multiprocessing import Pool, Queue
 
 
+#set env variable NILS dir
+cur_script_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
+os.environ["NILS_DIR"] = str(cur_script_dir)
+
+
 UNDEFINED_TASK = "Undefined"
 warnings.filterwarnings('ignore')
 
@@ -58,7 +63,12 @@ def annotate(cfg):
                     batch["actions"] = torch.concat(batch["actions"], dim=0)
                 batch["frame_names"] = np.array(batch["frame_names"])
                 annotator.owl.reset_cache()
-                annotated_frames_dir = os.path.join(cfg.io.labeled_frames_dir, ds.name, Path(batch["path"][0]).parent,
+
+
+                #remove extension from path
+                file_path = Path(batch["path"][0]).parent / Path(batch["path"][0]).stem
+
+                annotated_frames_dir = os.path.join(file_path,
                                                     "annotated_frames")
                 os.makedirs(annotated_frames_dir, exist_ok=True)
                 is_short_horizon = cfg.prior.use_gt_keystates
@@ -196,7 +206,7 @@ def annotate(cfg):
                     keystate_objects = keystate_objects[valid_keystate_indices]
                     keystate_scores = keystate_scores[valid_keystate_indices]
                     
-                    prompts = annotator.create_prompts(keystates,batch,scene_graphs,keystate_reasons,keystate_objects)
+                    prompts, prompts_aggregated = annotator.create_prompts(keystates,batch,scene_graphs,keystate_reasons,keystate_objects)
                 
                     keystate_reasons = np.array([{k: v[i] for k, v in keystate_reasons.items()} for i in range(len(keystate_reasons[list(keystate_reasons.keys())[0]]))])
 
@@ -208,10 +218,10 @@ def annotate(cfg):
                 color_obj_dict = {obj.name: obj.color for obj in annotator.object_manager.objects.values()}
                 
                 if "vertex" in cfg.llm._target_.lower():
-                    prompts = [get_prompt_simple(reason) for reason in keystate_reasons]
+                    #prompts = [get_prompt_simple(reason) for reason in keystate_reasons]
                     llm_outputs, candidates, scores = get_tasks_parallel(prompts)
                 elif "gpt" in cfg.llm._target_.lower():
-                    prompts = [get_simple_prompt_nl_reasons_gpt(reason) for reason in keystate_reasons]
+                    #prompts = [get_simple_prompt_nl_reasons_gpt(reason) for reason in keystate_reasons]
                     llm_outputs, candidates, scores = get_tasks_parallel_gpt(prompts)
                 
                 skipped_predictions_idx = []
@@ -281,12 +291,17 @@ def annotate(cfg):
 cur_dir = os.path.dirname(os.path.realpath(__file__))
 parent_dir = os.path.dirname(cur_dir)
 
-@hydra.main(config_path=f"{parent_dir}/conf/annotator", config_name="base")
+@hydra.main(config_path=f"{parent_dir}/conf/annotator", config_name="video")
 def annotate_hydra_wrapper(cfg):
+
+    ds = hydra.utils.instantiate(cfg["dataset"], n_jobs = cfg.n_splits,task_number=0)
+    ds_n_splits = min(cfg.n_splits, len(ds.paths))
+
     NUM_GPUS = len(cfg.GPU_IDS)
     GPU_IDS = cfg.GPU_IDS
     PROC_PER_GPU = cfg.PROC_PER_GPU 
-    ds_n_splits = cfg.n_splits
+    #ds_n_splits = cfg.n_splits
+    
     
     if NUM_GPUS*PROC_PER_GPU == 1:
         logging.info("Running in single process mode")

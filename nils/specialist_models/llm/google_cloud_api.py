@@ -21,7 +21,7 @@ from nils.specialist_models.llm.parse_utils import (
 )
 from nils.utils.utils import retry_on_exception
 
-vertexai.init(project="your_project", location="us-central1")
+vertexai.init(project="inspired-photon-438111-b4", location="us-central1")
 parameters = {
     "max_output_tokens": 80,
     "temperature": 0.1,

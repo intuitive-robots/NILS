@@ -20,7 +20,7 @@ from vertexai.preview.generative_models import (
 from nils.specialist_models.llm.parse_utils import parse_json
 from nils.utils.plot import crop_images_with_boxes
 
-vertexai.init(project="your_project", location="your_region")
+vertexai.init(project="inspired-photon-438111-b4", location="us-central1")
 parameters = {
     "max_output_tokens": 80,
     "temperature": 0.1,

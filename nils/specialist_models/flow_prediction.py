@@ -15,13 +15,10 @@ device  = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 from pathlib import Path
 
-home = str(Path.home())
-
-
 class FlowPredictor:
 
     def __init__(self,
-                 unimatch_checkpoint_path= os.path.join(home,"unimatch/pretrained/gmflow-scale2-regrefine6-mixdata-train320x576-4e7b215d.pth")):
+                 unimatch_checkpoint_path= os.path.join(os.environ["NILS_DIR"], "dependencies","unimatch/pretrained/gmflow-scale2-regrefine6-mixdata-train320x576-4e7b215d.pth")):
 
         task = "flow"
         self.flow_model = UniMatch(feature_channels=128,

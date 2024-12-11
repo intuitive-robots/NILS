@@ -11,7 +11,6 @@ from functools import wraps
 import cv2
 import numpy as np
 import pandas as pd
-from segment_anything.utils.amg import remove_small_regions
 import shapely
 import torch
 from PIL.Image import Image
@@ -24,7 +23,9 @@ from sklearn.linear_model import RANSACRegressor
 from supervision import Detections
 import torch.nn.functional as F
 from torchvision.ops import box_iou
-from tqdm import tqdm
+
+from nils.specialist_models.sam2.utils.amg import remove_small_regions
+
 
 def retry_on_exception(exception, retries=3, logger=None):
     """

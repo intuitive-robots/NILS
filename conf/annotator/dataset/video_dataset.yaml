@@ -1,5 +1,5 @@
 _target_: nils.my_datasets.video_dataset.VideoDataset
 
-path: /home/DATA_SHARE/bridge_data/bridge_data_v2/datacol2_toykitchen5/pnp_push_sweep/05/2023-07-11_14-42-06/raw/traj_group0/traj0/images0
+path: /home/nils/Documents/test_ds
 sampling_rate: 4
 name: TEST

@@ -30,23 +30,16 @@ DATASET = "nyu"
 
 user_home = os.path.expanduser("~")
 
+
+
 class DepthAnything:
     def __init__(self, model_path = "LiheYoung/depth-anything-large-hf"):
 
-        # model_name = "zoedepth"
-        # path = f"local::{home}/Depth-Anything/depth_anything_metric_depth_indoor.pt"
-        # #self.image_processor = AutoImageProcessor.from_pretrained(model_path)
-        # #self.model = AutoModelForDepthEstimation.from_pretrained(model_path).to(device)
-        #
-        # config = get_config(model_name, "eval")
-        # config.pretrained_resource = path
-        # self.model = build_model(config).to(device)
-        # self.model.eval()
 
 
         self.model = DepthAnythingV2(**{**model_configs[encoder], 'max_depth': max_depth})
         self.model.load_state_dict(
-            torch.load(os.path.join(user_home,"Depth-Anything-V2",f'checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth')))
+            torch.load(os.path.join(os.environ["NILS_DIR"], "dependencies","Depth-Anything-V2",f'checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth')))
 
         self.model = self.model.to(device)
 
